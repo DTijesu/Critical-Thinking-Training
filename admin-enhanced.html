@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Critical Thinking Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .number {
+            color: #333;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .stat-card.group-1 { border-top: 4px solid #3498db; }
+        .stat-card.group-2 { border-top: 4px solid #e74c3c; }
+        .stat-card.group-3 { border-top: 4px solid #2ecc71; }
+        .stat-card.group-4 { border-top: 4px solid #f39c12; }
+        .stat-card.total { border-top: 4px solid #9b59b6; }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .group-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .group-header {
+            padding: 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-header.group-1 { background: #3498db; }
+        .group-header.group-2 { background: #e74c3c; }
+        .group-header.group-3 { background: #2ecc71; }
+        .group-header.group-4 { background: #f39c12; }
+
+        .edit-scenario-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .edit-scenario-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .scenario-box {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .scenario-box h4 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-box p {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .group-members {
+            padding: 20px;
+        }
+
+        .member {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .member:last-child {
+            border-bottom: none;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .member-phone {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .member-time {
+            color: #999;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .empty-group {
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .all-participants {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .all-participants h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #666;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .group-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .group-badge.group-1 { background: #3498db; }
+        .group-badge.group-2 { background: #e74c3c; }
+        .group-badge.group-3 { background: #2ecc71; }
+        .group-badge.group-4 { background: #f39c12; }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner-large {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-body label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .close-modal {
+            background: #95a5a6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .close-modal:hover {
+            background: #7f8c8d;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .groups-container {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Admin Dashboard</h1>
+            <p>Critical Thinking Training - Participant & Scenario Management</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-container">
+            <div class="stat-card total">
+                <h3>Total Participants</h3>
+                <div class="number" id="totalCount">0</div>
+            </div>
+            <div class="stat-card group-1">
+                <h3>Group 1</h3>
+                <div class="number" id="group1Count">0</div>
+            </div>
+            <div class="stat-card group-2">
+                <h3>Group 2</h3>
+                <div class="number" id="group2Count">0</div>
+            </div>
+            <div class="stat-card group-3">
+                <h3>Group 3</h3>
+                <div class="number" id="group3Count">0</div>
+            </div>
+            <div class="stat-card group-4">
+                <h3>Group 4</h3>
+                <div class="number" id="group4Count">0</div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh Data</button>
+            <button class="btn btn-primary" onclick="exportToCSV()">📥 Export to CSV</button>
+            <button class="btn btn-success" onclick="showScenarioManager()">📝 Manage All Scenarios</button>
+            <button class="btn btn-danger" onclick="resetAllData()" style="margin-left: auto;">⚠️ Reset All Data</button>
+        </div>
+
+        <!-- Groups View with Scenarios -->
+        <div class="groups-container" id="groupsContainer">
+            <div class="group-card">
+                <div class="group-header group-1">
+                    <span>Group 1: The Think Tank</span>
+                    <button class="edit-scenario-btn" onclick="editScenario(1)">✏️ Edit</button>
+                </div>
+                <div class="scenario-box">
+                    <h4>🎯 Assigned Task:</h4>
+                    <p id="scenario1">Loading...</p>
+                </div>
+                <div class="group-members" id="group1Members">
+                    <div class="loading">
+                        <div class="spinner-large"></div>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-card">
+                <div class="group-header group-2">
+                    <span>Group 2: The Insight Collective</span>
+                    <button class="edit-scenario-btn" onclick="editScenario(2)">✏️ Edit</button>
+                </div>
+                <div class="scenario-box">
+                    <h4>🎯 Assigned Task:</h4>
+                    <p id="scenario2">Loading...</p>
+                </div>
+                <div class="group-members" id="group2Members">
+                    <div class="loading">
+                        <div class="spinner-large"></div>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-card">
+                <div class="group-header group-3">
+                    <span>Group 3: The Solution Studio</span>
+                    <button class="edit-scenario-btn" onclick="editScenario(3)">✏️ Edit</button>
+                </div>
+                <div class="scenario-box">
+                    <h4>🎯 Assigned Task:</h4>
+                    <p id="scenario3">Loading...</p>
+                </div>
+                <div class="group-members" id="group3Members">
+                    <div class="loading">
+                        <div class="spinner-large"></div>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-card">
+                <div class="group-header group-4">
+                    <span>Group 4: The Pathfinders</span>
+                    <button class="edit-scenario-btn" onclick="editScenario(4)">✏️ Edit</button>
+                </div>
+                <div class="scenario-box">
+                    <h4>🎯 Assigned Task:</h4>
+                    <p id="scenario4">Loading...</p>
+                </div>
+                <div class="group-members" id="group4Members">
+                    <div class="loading">
+                        <div class="spinner-large"></div>
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Participants Table -->
+        <div class="all-participants">
+            <h2>📋 All Participants</h2>
+            <div style="overflow-x: auto;">
+                <table id="participantsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th>Group</th>
+                            <th>Registered At</th>
+                        </tr>
+                    </thead>
+                    <tbody id="participantsTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px;">
+                                <div class="spinner-large"></div>
+                                Loading participants...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Scenario Modal -->
+    <div id="scenarioModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Edit Scenario</h2>
+                <p style="color: #666; margin-top: 10px;">Update the critical thinking task for <strong id="modalGroupName">Group X</strong></p>
+            </div>
+            <div class="modal-body">
+                <label for="scenarioInput">Scenario / Task Description:</label>
+                <textarea id="scenarioInput" placeholder="Enter the critical thinking task or scenario for this group..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="close-modal" onclick="closeScenarioModal()">Cancel</button>
+                <button class="btn btn-success" onclick="saveScenario()">💾 Save Scenario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scenario Manager Modal -->
+    <div id="scenarioManagerModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>📝 Manage All Scenarios</h2>
+                <p style="color: #666; margin-top: 10px;">Edit all group scenarios at once</p>
+            </div>
+            <div class="modal-body" style="display: grid; gap: 20px;">
+                <div>
+                    <label for="scenario1Input">Group 1: The Think Tank</label>
+                    <textarea id="scenario1Input" style="min-height: 80px;"></textarea>
+                </div>
+                <div>
+                    <label for="scenario2Input">Group 2: The Insight Collective</label>
+                    <textarea id="scenario2Input" style="min-height: 80px;"></textarea>
+                </div>
+                <div>
+                    <label for="scenario3Input">Group 3: The Solution Studio</label>
+                    <textarea id="scenario3Input" style="min-height: 80px;"></textarea>
+                </div>
+                <div>
+                    <label for="scenario4Input">Group 4: The Pathfinders</label>
+                    <textarea id="scenario4Input" style="min-height: 80px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="close-modal" onclick="closeScenarioManager()">Cancel</button>
+                <button class="btn btn-success" onclick="saveAllScenarios()">💾 Save All Scenarios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+        let allParticipants = [];
+        let currentScenarios = {};
+        let editingGroupNumber = null;
+
+        const GROUP_NAMES = [
+            "The Think Tank",
+            "The Insight Collective",
+            "The Solution Studio",
+            "The Pathfinders"
+        ];
+
+        const DEFAULT_SCENARIOS = [
+            "Analyze a complex business problem: A local company is losing customers despite having the best prices. What non-price factors could be causing this, and what solutions would you recommend?",
+            "Ethical dilemma: Your team developed an AI tool that could automate 60% of jobs in your industry. Should you release it? Discuss the trade-offs between innovation and social responsibility.",
+            "Creative problem solving: Design a public transportation system for a city with extreme traffic congestion, limited budget, and resistance to change. What innovative solutions can you propose?",
+            "Critical analysis: You've been given three conflicting research reports about climate change solutions. How would you evaluate their credibility and determine the best course of action?"
+        ];
+
+        // ============================================
+        // LOAD DATA
+        // ============================================
+        function loadParticipants() {
+            database.ref('participants').on('value', (snapshot) => {
+                allParticipants = [];
+                const data = snapshot.val();
+
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        allParticipants.push({
+                            id: key,
+                            ...data[key]
+                        });
+                    });
+
+                    allParticipants.sort((a, b) => b.timestamp - a.timestamp);
+                }
+
+                updateStatistics();
+                updateGroupViews();
+                updateTable();
+            });
+        }
+
+        function loadScenarios() {
+            database.ref('scenarios').on('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                for (let i = 1; i <= 4; i++) {
+                    const scenario = data?.[`group${i}`] || DEFAULT_SCENARIOS[i - 1];
+                    currentScenarios[`group${i}`] = scenario;
+                    document.getElementById(`scenario${i}`).textContent = scenario;
+                }
+            });
+        }
+
+        // ============================================
+        // UPDATE DISPLAYS
+        // ============================================
+        function updateStatistics() {
+            const groupCounts = [0, 0, 0, 0];
+
+            allParticipants.forEach(participant => {
+                groupCounts[participant.group - 1]++;
+            });
+
+            document.getElementById('totalCount').textContent = allParticipants.length;
+            document.getElementById('group1Count').textContent = groupCounts[0];
+            document.getElementById('group2Count').textContent = groupCounts[1];
+            document.getElementById('group3Count').textContent = groupCounts[2];
+            document.getElementById('group4Count').textContent = groupCounts[3];
+        }
+
+        function updateGroupViews() {
+            const groupedParticipants = { 1: [], 2: [], 3: [], 4: [] };
+
+            allParticipants.forEach(participant => {
+                groupedParticipants[participant.group].push(participant);
+            });
+
+            for (let groupNum = 1; groupNum <= 4; groupNum++) {
+                const container = document.getElementById(`group${groupNum}Members`);
+                const members = groupedParticipants[groupNum];
+
+                if (members.length === 0) {
+                    container.innerHTML = '<div class="empty-group">No participants yet</div>';
+                } else {
+                    container.innerHTML = members.map(member => `
+                        <div class="member">
+                            <div class="member-name">${escapeHtml(member.name)}</div>
+                            <div class="member-phone">📱 ${escapeHtml(member.phone)}</div>
+                            <div class="member-time">⏰ ${formatDateTime(member.registeredAt)}</div>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function updateTable() {
+            const tbody = document.getElementById('participantsTableBody');
+
+            if (allParticipants.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #999;">No participants registered yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = allParticipants.map((participant, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${escapeHtml(participant.name)}</td>
+                    <td>${escapeHtml(participant.phone)}</td>
+                    <td>
+                        <span class="group-badge group-${participant.group}">
+                            Group ${participant.group}: ${escapeHtml(participant.groupName)}
+                        </span>
+                    </td>
+                    <td>${formatDateTime(participant.registeredAt)}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ============================================
+        // SCENARIO MANAGEMENT
+        // ============================================
+        function editScenario(groupNumber) {
+            editingGroupNumber = groupNumber;
+            const groupName = GROUP_NAMES[groupNumber - 1];
+            const currentScenario = currentScenarios[`group${groupNumber}`];
+
+            document.getElementById('modalGroupName').textContent = `Group ${groupNumber}: ${groupName}`;
+            document.getElementById('scenarioInput').value = currentScenario;
+            document.getElementById('scenarioModal').classList.add('show');
+        }
+
+        function closeScenarioModal() {
+            document.getElementById('scenarioModal').classList.remove('show');
+            editingGroupNumber = null;
+        }
+
+        async function saveScenario() {
+            if (!editingGroupNumber) return;
+
+            const newScenario = document.getElementById('scenarioInput').value.trim();
+
+            if (!newScenario) {
+                alert('Please enter a scenario');
+                return;
+            }
+
+            try {
+                await database.ref(`scenarios/group${editingGroupNumber}`).set(newScenario);
+                alert('Scenario updated successfully!');
+                closeScenarioModal();
+            } catch (error) {
+                console.error('Error saving scenario:', error);
+                alert('Failed to save scenario. Please try again.');
+            }
+        }
+
+        function showScenarioManager() {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`scenario${i}Input`).value = currentScenarios[`group${i}`];
+            }
+            document.getElementById('scenarioManagerModal').classList.add('show');
+        }
+
+        function closeScenarioManager() {
+            document.getElementById('scenarioManagerModal').classList.remove('show');
+        }
+
+        async function saveAllScenarios() {
+            try {
+                const updates = {};
+                for (let i = 1; i <= 4; i++) {
+                    const scenario = document.getElementById(`scenario${i}Input`).value.trim();
+                    if (scenario) {
+                        updates[`group${i}`] = scenario;
+                    }
+                }
+
+                await database.ref('scenarios').set(updates);
+                alert('All scenarios updated successfully!');
+                closeScenarioManager();
+            } catch (error) {
+                console.error('Error saving scenarios:', error);
+                alert('Failed to save scenarios. Please try again.');
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function formatDateTime(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function refreshData() {
+            loadParticipants();
+            loadScenarios();
+            alert('Data refreshed successfully!');
+        }
+
+        function exportToCSV() {
+            if (allParticipants.length === 0) {
+                alert('No data to export');
+                return;
+            }
+
+            let csv = 'No,Name,Phone Number,Group Number,Group Name,Scenario,Registered At\n';
+
+            allParticipants.forEach((participant, index) => {
+                csv += `${index + 1},`;
+                csv += `"${participant.name}",`;
+                csv += `"${participant.phone}",`;
+                csv += `${participant.group},`;
+                csv += `"${participant.groupName}",`;
+                csv += `"${participant.scenario || ''}",`;
+                csv += `"${participant.registeredAt}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `participants_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function resetAllData() {
+            const confirmed = confirm(
+                '⚠️ WARNING: This will delete ALL participant data and reset the counter.\n\n' +
+                'Scenarios will NOT be deleted.\n\n' +
+                'Are you sure you want to continue?'
+            );
+
+            if (confirmed) {
+                const doubleConfirmed = confirm(
+                    'This action CANNOT be undone.\n\n' +
+                    'Click OK to permanently delete all participant data.'
+                );
+
+                if (doubleConfirmed) {
+                    database.ref('participants').remove();
+                    database.ref('counter').set(0);
+                    alert('All participant data has been reset. Scenarios were preserved.');
+                }
+            }
+        }
+
+        // ============================================
+        // CLOSE MODALS ON OUTSIDE CLICK
+        // ============================================
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+
+        // ============================================
+        // INITIALIZE
+        // ============================================
+        window.addEventListener('load', function() {
+            loadParticipants();
+            loadScenarios();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Thinking Training - Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .confirmation {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .confirmation.show {
+            display: block;
+        }
+
+        .confirmation-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .confirmation h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .group-badge {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        .scenario-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .scenario-box h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-box p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .confirmation p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .instruction-highlight {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .instruction-highlight p {
+            color: #856404;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .scenario-box {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Registration Form -->
+        <div id="registrationForm">
+            <div class="header">
+                <h1>🧠 Critical Thinking Training</h1>
+                <p>Register for the session</p>
+            </div>
+
+            <form id="participantForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        required 
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                    >
+                    <div class="error-message" id="nameError">Please enter your full name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number *</label>
+                    <input 
+                        type="tel" 
+                        id="phoneNumber" 
+                        name="phoneNumber" 
+                        required 
+                        placeholder="e.g., +234 xxx xxx xxxx"
+                        autocomplete="tel"
+                    >
+                    <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Register Now
+                </button>
+            </form>
+        </div>
+
+        <!-- Confirmation Message (Hidden by default) -->
+        <div id="confirmationMessage" class="confirmation">
+            <div class="confirmation-icon">✅</div>
+            <h2>Registration Successful!</h2>
+            <div class="group-badge" id="groupBadge">Group X</div>
+            <p>You have been assigned to <strong id="groupName">The Think Tank</strong>.</p>
+            
+            <!-- Scenario Information -->
+            <div class="scenario-box">
+                <h3>🎯 Your Group's Task</h3>
+                <p id="scenarioText">Loading scenario...</p>
+            </div>
+
+            <!-- Instruction -->
+            <div class="instruction-highlight">
+                <p>📌 During the session, you will work with others in your group on this critical thinking task.</p>
+            </div>
+
+            <p style="margin-top: 20px; font-size: 14px;">Please remember your group and task for the upcoming activity.</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        // REPLACE THIS WITH YOUR FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ============================================
+        // GROUP NAMES AND SCENARIOS CONFIGURATION
+        // ============================================
+        const GROUP_NAMES = [
+            "The Think Tank",
+            "The Insight Collective",
+            "The Solution Studio",
+            "The Pathfinders"
+        ];
+
+        // DEFAULT SCENARIOS - Can be overridden by facilitator in Firebase
+        const DEFAULT_SCENARIOS = [
+            "Analyze a complex business problem: A local company is losing customers despite having the best prices. What non-price factors could be causing this, and what solutions would you recommend?",
+            "Ethical dilemma: Your team developed an AI tool that could automate 60% of jobs in your industry. Should you release it? Discuss the trade-offs between innovation and social responsibility.",
+            "Creative problem solving: Design a public transportation system for a city with extreme traffic congestion, limited budget, and resistance to change. What innovative solutions can you propose?",
+            "Critical analysis: You've been given three conflicting research reports about climate change solutions. How would you evaluate their credibility and determine the best course of action?"
+        ];
+
+        // ============================================
+        // FORM SUBMISSION HANDLER
+        // ============================================
+        document.getElementById('participantForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+
+            // Basic validation
+            if (!fullName || fullName.length < 2) {
+                showError('nameError');
+                return;
+            }
+
+            if (!phoneNumber || phoneNumber.length < 10) {
+                showError('phoneError');
+                return;
+            }
+
+            // Disable submit button and show loading
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Registering... <span class="spinner"></span>';
+
+            try {
+                // Register participant and get assigned group
+                const result = await registerParticipant(fullName, phoneNumber);
+
+                // Show confirmation message with scenario
+                showConfirmation(result);
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Register Now';
+            }
+        });
+
+        // ============================================
+        // REGISTRATION LOGIC WITH ROUND-ROBIN (OPTIMIZED)
+        // ============================================
+        async function registerParticipant(name, phone) {
+            try {
+                // Start fetching scenarios immediately (parallel operation)
+                const scenariosPromise = database.ref('scenarios').once('value');
+                
+                // Use transaction for atomic counter increment (ensures no duplicate assignments)
+                const counterRef = database.ref('counter');
+                const transactionResult = await counterRef.transaction(
+                    function(currentCount) {
+                        return (currentCount || 0) + 1;
+                    },
+                    function(error, committed, snapshot) {
+                        if (error) {
+                            console.error('Transaction failed:', error);
+                        }
+                    },
+                    false // Don't apply locally first - faster
+                );
+
+                if (!transactionResult.committed) {
+                    throw new Error('Counter transaction failed');
+                }
+
+                const participantNumber = transactionResult.snapshot.val();
+                
+                // Calculate group assignment
+                const groupIndex = (participantNumber - 1) % 4;
+                const groupNumber = groupIndex + 1;
+                const groupName = GROUP_NAMES[groupIndex];
+
+                // Get scenarios (should complete quickly since started in parallel)
+                const scenariosSnapshot = await scenariosPromise;
+                const scenariosData = scenariosSnapshot.val();
+                let scenario = scenariosData?.[`group${groupNumber}`];
+                
+                // Fallback to default if no scenario in database
+                if (!scenario) {
+                    scenario = DEFAULT_SCENARIOS[groupIndex];
+                }
+
+                // Create participant object
+                const participant = {
+                    name: name,
+                    phone: phone,
+                    group: groupNumber,
+                    groupName: groupName,
+                    scenario: scenario,
+                    registeredAt: new Date().toISOString(),
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                };
+
+                // Save to Firebase but don't wait for confirmation
+                // This is safe because we already have our group assignment
+                database.ref('participants').push(participant).catch(err => {
+                    console.error('Error saving participant (background):', err);
+                });
+
+                // Return immediately - user sees confirmation right away!
+                return {
+                    number: groupNumber,
+                    name: groupName,
+                    scenario: scenario
+                };
+            } catch (error) {
+                console.error('Registration error:', error);
+                throw error;
+            }
+        }
+
+        // ============================================
+        // UI HELPER FUNCTIONS
+        // ============================================
+        function showError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.classList.add('show');
+            setTimeout(() => {
+                errorElement.classList.remove('show');
+            }, 3000);
+        }
+
+        function showConfirmation(assignedGroup) {
+            // Hide form
+            document.getElementById('registrationForm').style.display = 'none';
+
+            // Update confirmation details
+            document.getElementById('groupBadge').textContent = `Group ${assignedGroup.number}`;
+            document.getElementById('groupName').textContent = assignedGroup.name;
+            document.getElementById('scenarioText').textContent = assignedGroup.scenario;
+
+            // Show confirmation
+            document.getElementById('confirmationMessage').classList.add('show');
+        }
+
+        // Clear error messages on input
+        document.getElementById('fullName').addEventListener('input', function() {
+            document.getElementById('nameError').classList.remove('show');
+        });
+
+        document.getElementById('phoneNumber').addEventListener('input', function() {
+            document.getElementById('phoneError').classList.remove('show');
+        });
+    </script>
+</body>
+</html>
